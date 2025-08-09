@@ -18,7 +18,8 @@ const d = document,
   $ambientMusicCover = d.querySelector('.ambient-music-cover'),
   $mainBg = d.querySelector('.main-background'),
   $btnPause = d.querySelector('.ambient-music-controls-play'),
-  $summarySection = d.querySelector('.summary-section')
+  $summarySection = d.querySelector('.summary-section'),
+  $sectionMenu = d.querySelector('.section-menu')
 
 //CTES
 const OPTIONS = {
@@ -152,6 +153,7 @@ async function runOrders() {
     mount = Math.floor(Math.random() * stockAvailable) + 1
     total = price * mount
     $sceneNumberClients.innerHTML = `Atendiendo al cliente <b>${clientNumber}/${numClientes}</b>.`
+    showMenuInInvoice()
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
@@ -189,6 +191,7 @@ async function runOrders() {
     await dialogExchange($clientSpeech, $waiterSpeech, `Ok. De acuerdo.`)
     $clientSpeech.classList.add('hidden')
     $scene.style.opacity = '0'
+    $sectionMenu.classList.add('opacity-off')
     await wait(0.7)
     await updateScene(3, `Preparando <b>${mount} ${currentOrder}/s</b>.`)
     await wait(0.7)
@@ -250,9 +253,35 @@ async function runOrders() {
   $sceneDescription.innerHTML = 'Gracias por preferirnos, hemos cerrado.'
   $scene.style.opacity = '1'
   $sceneNumberClients.innerHTML = ''
+  $invoiceClient.classList.add('hidden')
   await wait(2)
   $scene.style.opacity = '0'
   insertClientsOnTable()
+}
+function showMenuInInvoice() {
+  const $tbody = $sectionMenu.querySelector('tbody')
+  $tbody.innerHTML = ''
+
+  const headerRow = d.createElement('tr')
+  headerRow.innerHTML = `
+    <th>Nombre</th>
+    <th>Precio</th>
+    <th>Disponibles</th>
+  `
+  $tbody.appendChild(headerRow)
+
+  OPTIONS_KEYS.forEach((key) => {
+    const option = OPTIONS[key]
+    const $tr = d.createElement('tr')
+    $tr.innerHTML = `
+      <td>${key}</td>
+      <td>${option.price.toFixed(2)}</td>
+      <td>${option.stock}</td>
+    `
+    $tbody.appendChild($tr)
+  })
+
+  $sectionMenu.classList.remove('opacity-off')
 }
 
 function generateBill() {
