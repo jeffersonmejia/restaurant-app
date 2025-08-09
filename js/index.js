@@ -14,7 +14,8 @@ const d = document,
   $audio = document.getElementById('ambient-music-audio'),
   $ambientMusicScene = d.querySelector('.ambient-music'),
   $invoiceClientSection = d.querySelector('.invoice-section'),
-  $invoiceClient = d.querySelector('.invoice-table')
+  $invoiceClient = d.querySelector('.invoice-table'),
+  $ambientMusicCover = d.querySelector('.ambient-music-cover')
 
 //CTES
 const OPTIONS = {
@@ -59,8 +60,10 @@ function togglePlayPause() {
   if ($audio.paused) {
     $audio.play()
     $audio.volume = 1
+    $ambientMusicCover.classList.add('ambient-music-cover-on')
   } else {
     $audio.pause()
+    $ambientMusicCover.classList.remove('ambient-music-cover-on')
   }
 }
 
