@@ -11,7 +11,10 @@ const d = document,
   $sceneNumberClients = d.getElementById('scene-number-clients'),
   $clientSpeech = d.querySelector('.client-speech'),
   $waiterSpeech = d.querySelector('.waiter-speech'),
-  $audio = document.getElementById('ambient-music-audio')
+  $audio = document.getElementById('ambient-music-audio'),
+  $ambientMusicScene = d.querySelector('.ambient-music'),
+  $invoiceClientSection = d.querySelector('.invoice-section'),
+  $invoiceClient = d.querySelector('.invoice-table')
 
 //CTES
 const OPTIONS = {
@@ -106,7 +109,6 @@ async function processOrder(order) {
   waitTime =
     Math.floor(Math.random() * (MAX_WAIT_TIME - MIN_WAIT_TIME + 1)) +
     MIN_WAIT_TIME
-  console.log(`🔍 Procesando pedido de ${order}`)
   await wait(waitTime)
 }
 
@@ -119,7 +121,9 @@ async function dialogExchange(speakerEl, listenerEl, text, seconds = 3.5) {
 
 async function runOrders() {
   await updateScene(2, '')
+  $ambientMusicScene.classList.remove('opacity-off')
   for (let i = 0; i < numClientes; i++) {
+    $scene.style.opacity = '1'
     let stockAvailable = 0,
       mount = 0,
       name = `${usersJSON[i].name.first} ${usersJSON[i].name.last}`,
@@ -183,7 +187,7 @@ async function runOrders() {
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
-      `Por su puesto, La cuenta sería $${total}USD total.`
+      `Por su puesto, La cuenta sería $${total}USD total. Tenga su factura.`
     )
     orderObject = {
       number: clientNumber,
@@ -196,20 +200,45 @@ async function runOrders() {
       total: mount * price,
     }
     summary.push(orderObject)
+    generateBill()
+    $invoiceClientSection.classList.remove('opacity-off')
+    await wait(5)
     await dialogExchange($clientSpeech, $waiterSpeech, `Tenga, gracias.`)
+    $invoiceClientSection.classList.add('opacity-off')
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
       `A usted, vuelva pronto.`
     )
     orderCount++
-    $scene.style.transformX = '100%'
+    $scene.style.opacity = '0'
     await wait(2)
   }
   console.log(
     'Se terminaron los pedidos o no hay más productos disponibles para servir.'
   )
+  $scene.style.opacity = '1'
   insertClientsOnTable()
+}
+
+function generateBill() {
+  const rows = $invoiceClient.querySelectorAll('tbody tr'),
+    $numberBill = $invoiceClientSection.querySelector('h2')
+
+  const data = [
+    orderObject.dni,
+    orderObject.name,
+    orderObject.address,
+    orderObject.order,
+    `$${orderObject.price}`,
+    orderObject.mount,
+    `$${orderObject.total}`,
+  ]
+
+  $numberBill.innerText = `Factura No.${orderObject.number}`
+  rows.forEach((row, i) => {
+    row.querySelector('td').innerText = data[i]
+  })
 }
 
 async function getUsers() {
