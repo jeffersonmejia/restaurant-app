@@ -19,13 +19,14 @@ const d = document,
   $mainBg = d.querySelector('.main-background'),
   $btnPause = d.querySelector('.ambient-music-controls-play'),
   $summarySection = d.querySelector('.summary-section'),
-  $sectionMenu = d.querySelector('.section-menu')
+  $sectionMenu = d.querySelector('.section-menu'),
+  $totalSells = d.getElementById('total-sells')
 
 //CTES
 const OPTIONS = {
-    ['sandwich']: { stock: 3, price: 1 },
-    ['hamburguesa']: { stock: 6, price: 2 },
-    ['tonga']: { stock: 4, price: 3 },
+    ['sandwich']: { stock: 1, price: 1 },
+    ['hamburguesa']: { stock: 0, price: 2 },
+    ['tonga']: { stock: 1, price: 3 },
     ['encebollado']: { stock: 5, price: 3 },
     ['torta de verde']: { stock: 5, price: 2 },
     ['ceviche de camaron']: { stock: 5, price: 3.5 },
@@ -93,7 +94,7 @@ function wait(seconds) {
 
 async function startSimulation() {
   await updateScene(1, 'Bienvenido, hemos abierto')
-  numClientes = randomNumber(0) + 1
+  numClientes = randomNumber(0) + 5
   await getUsers()
   await runOrders()
 }
@@ -130,10 +131,10 @@ async function dialogExchange(speakerEl, listenerEl, text, seconds = 3.5) {
   listenerEl.style.opacity = '0'
   await wait(seconds)
 }
-
 async function runOrders() {
   $mainBg.setAttribute('src', 'assets/background/background.jpg')
   $mainBg.classList.remove('opacity-off')
+  d.querySelector('body').style.overflow = 'hidden'
   await updateScene(2, '')
   $ambientMusicScene.classList.remove('opacity-off')
   for (let i = 0; i < numClientes; i++) {
@@ -146,46 +147,56 @@ async function runOrders() {
     if (i > 0) {
       $scene.style.transformX = '0'
     }
-    currentOrder = getRandomChoice()
+
     clientNumber = i + 1
-    price = OPTIONS[currentOrder].price
-    stockAvailable = OPTIONS[currentOrder].stock
-    mount = Math.floor(Math.random() * stockAvailable) + 1
-    total = price * mount
-    $sceneNumberClients.innerHTML = `Atendiendo al cliente <b>${clientNumber}/${numClientes}</b>.`
-    showMenuInInvoice()
-    await dialogExchange(
-      $waiterSpeech,
-      $clientSpeech,
-      'Buen día. ¿Qué va a ordenar?'
-    )
-    await dialogExchange(
-      $clientSpeech,
-      $waiterSpeech,
-      `Hola, soy <b>${name}</b>. Me da <b>${mount} ${currentOrder}/s</b>.`
-    )
+    let hasStock = false
+
+    do {
+      currentOrder = getRandomChoice()
+      price = OPTIONS[currentOrder].price
+      stockAvailable = OPTIONS[currentOrder].stock
+      mount = Math.floor(Math.random() * stockAvailable) + 1
+      total = price * mount
+      $sceneNumberClients.innerHTML = `Atendiendo al cliente <b>${clientNumber}/${numClientes}</b>.`
+      showMenuInInvoice()
+      await dialogExchange(
+        $waiterSpeech,
+        $clientSpeech,
+        hasStock ? '¿Desea pedir algo más?' : 'Buen día. ¿Qué va a ordenar?'
+      )
+      await dialogExchange(
+        $clientSpeech,
+        $waiterSpeech,
+        hasStock
+          ? `Me da <b>${mount} ${currentOrder}/s</b>.`
+          : `Hola, soy <b>${name}</b>. Me da <b>${mount} ${currentOrder}/s</b>.`
+      )
+
+      if (stockAvailable <= 0) {
+        if (!stockOutList.has(currentOrder)) {
+          await dialogExchange(
+            $waiterSpeech,
+            $clientSpeech,
+            `Se acabó el stock de ${currentOrder}. No podemos servir más de este producto.`
+          )
+          stockOutList.add(currentOrder)
+        } else {
+          await dialogExchange(
+            $waiterSpeech,
+            $clientSpeech,
+            `No hay stock de ${currentOrder}. Pedido no servido.`
+          )
+        }
+        hasStock = true
+      } else {
+        hasStock = false
+      }
+    } while (stockAvailable <= 0)
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
       `Con gusto, cuesta <b>${price}USD</b>. En <b>${mount} ${currentOrder}<b>, serían <b>$${total}USD</b>.`
     )
-    if (stockAvailable <= 0) {
-      if (!stockOutList.has(currentOrder)) {
-        await dialogExchange(
-          $waiterSpeech,
-          $clientSpeech,
-          `Se acabó el stock de ${currentOrder}. No podemos servir más de este producto.`
-        )
-        stockOutList.add(currentOrder)
-      } else {
-        await dialogExchange(
-          $waiterSpeech,
-          $clientSpeech,
-          `No hay stock de ${currentOrder}. Pedido no servido.`
-        )
-      }
-      continue
-    }
     await processOrder(currentOrder)
     OPTIONS[currentOrder].stock--
     await dialogExchange($clientSpeech, $waiterSpeech, `Ok. De acuerdo.`)
@@ -199,7 +210,7 @@ async function runOrders() {
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
-      `<b>Orden# ${clientNumber}</b>. Aquí tiene su <b>${currentOrder}</b>. ¡Buen provecho!`
+      `<b>Orden# ${clientNumber}</b>. Aquí tiene su/s <b>${mount}</b> <b>${currentOrder}</b>. ¡Buen provecho!`
     )
     $clientSpeech.classList.remove('hidden')
     await dialogExchange(
@@ -230,16 +241,28 @@ async function runOrders() {
       `Por su puesto <b>${orderObject.name}</b>, La cuenta sería <b>$${total}USD</b> total. Tenga su factura.`
     )
 
-    summary.push(orderObject)
     generateBill()
     $invoiceClientSection.classList.remove('opacity-off')
     await wait(1.5)
-    await dialogExchange($clientSpeech, $waiterSpeech, `Tenga, gracias.`)
+    const satisfaction = Math.random() < 0.5 ? 0 : 1
+    const satisfactionText = satisfaction
+      ? 'Quedé satisfecho.'
+      : 'No quedé satisfecho.'
+    await dialogExchange(
+      $clientSpeech,
+      $waiterSpeech,
+      `Tenga, gracias. ${satisfactionText}`
+    )
+    orderObject.satisfaction = satisfaction
+    summary.push(orderObject)
+
     $invoiceClientSection.classList.add('opacity-off')
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
-      `A usted, vuelva pronto.`
+      satisfaction > 0
+        ? `A usted, vuelva pronto.`
+        : 'Lo sentimos... trataremos de mejorar nuestro servicio.'
     )
     orderCount++
     $scene.style.opacity = '0'
@@ -256,8 +279,10 @@ async function runOrders() {
   $invoiceClient.classList.add('hidden')
   await wait(2)
   $scene.style.opacity = '0'
+  d.querySelector('body').style.overflow = 'scroll'
   insertClientsOnTable()
 }
+
 function showMenuInInvoice() {
   const $tbody = $sectionMenu.querySelector('tbody')
   $tbody.innerHTML = ''
@@ -275,7 +300,7 @@ function showMenuInInvoice() {
     const $tr = d.createElement('tr')
     $tr.innerHTML = `
       <td>${key}</td>
-      <td>${option.price.toFixed(2)}</td>
+      <td>$${option.price.toFixed(2)}</td>
       <td>${option.stock}</td>
     `
     $tbody.appendChild($tr)
@@ -314,6 +339,8 @@ async function getUsers() {
 }
 
 function insertClientsOnTable() {
+  let totalsells = 0,
+    totalSatisfaction = 0
   summary.forEach((client) => {
     const $tr = d.createElement('tr')
 
@@ -324,12 +351,19 @@ function insertClientsOnTable() {
       <td>${client.name}</td>
       <td>${client.address}</td>
       <td>${client.order}</td>
-      <td>${client.price}</td>
+      <td>$${client.price}</td>
       <td>${client.mount}</td>
-      <td>${client.total}</td>
+      <td>$${client.total}</td>
+      <td>${client.satisfaction > 0 ? 'Si' : 'No'}</td>
     `
+
     $table.querySelector('tbody').appendChild($tr)
+    totalsells += client.total
+    totalSatisfaction += client.satisfaction > 0 ? 1 : 0
   })
+  $totalSells.innerHTML = `Ventas totales: <b>$${totalsells}USD</b> | Clientes satisfechos: <b>${totalSatisfaction}</b> | Clientes insatisfechos: <b>${
+    summary.length - totalSatisfaction
+  }</b>.`
   $summarySection.classList.remove('opacity-off')
 }
 
