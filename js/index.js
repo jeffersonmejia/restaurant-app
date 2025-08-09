@@ -15,7 +15,10 @@ const d = document,
   $ambientMusicScene = d.querySelector('.ambient-music'),
   $invoiceClientSection = d.querySelector('.invoice-section'),
   $invoiceClient = d.querySelector('.invoice-table'),
-  $ambientMusicCover = d.querySelector('.ambient-music-cover')
+  $ambientMusicCover = d.querySelector('.ambient-music-cover'),
+  $mainBg = d.querySelector('.main-background'),
+  $btnPause = d.querySelector('.ambient-music-controls-play'),
+  $summarySection = d.querySelector('.summary-section')
 
 //CTES
 const OPTIONS = {
@@ -61,9 +64,11 @@ function togglePlayPause() {
     $audio.play()
     $audio.volume = 1
     $ambientMusicCover.classList.add('ambient-music-cover-on')
+    $btnPause.setAttribute('src', 'assets/buttons/pause.png')
   } else {
     $audio.pause()
     $ambientMusicCover.classList.remove('ambient-music-cover-on')
+    $btnPause.setAttribute('src', 'assets/buttons/play.png')
   }
 }
 
@@ -87,17 +92,20 @@ function wait(seconds) {
 
 async function startSimulation() {
   await updateScene(1, 'Bienvenido, hemos abierto')
-  numClientes = randomNumber(12) + 1
+  numClientes = randomNumber(0) + 1
   await getUsers()
   await runOrders()
 }
 
 async function updateScene(sceneNumber, message) {
   $sceneImg.setAttribute('src', `assets/scenes/${sceneNumber}.gif`)
-  $sceneDescription.innerText = message
+  $sceneDescription.innerHTML = message
   $scene.style.opacity = '1'
   await wait(2)
-  if (sceneNumber != 2) {
+  if (sceneNumber === 3) {
+    await wait(3.5)
+    $scene.style.opacity = '0'
+  } else if (sceneNumber != 2) {
     $scene.style.opacity = '0'
     await wait(0.3)
   }
@@ -116,13 +124,15 @@ async function processOrder(order) {
 }
 
 async function dialogExchange(speakerEl, listenerEl, text, seconds = 3.5) {
-  speakerEl.innerText = text
+  speakerEl.innerHTML = text
   speakerEl.style.opacity = '1'
   listenerEl.style.opacity = '0'
   await wait(seconds)
 }
 
 async function runOrders() {
+  $mainBg.setAttribute('src', 'assets/background/background.jpg')
+  $mainBg.classList.remove('opacity-off')
   await updateScene(2, '')
   $ambientMusicScene.classList.remove('opacity-off')
   for (let i = 0; i < numClientes; i++) {
@@ -141,7 +151,7 @@ async function runOrders() {
     stockAvailable = OPTIONS[currentOrder].stock
     mount = Math.floor(Math.random() * stockAvailable) + 1
     total = price * mount
-    $sceneNumberClients.innerText = `Atendiendo al cliente ${clientNumber}/${numClientes}.`
+    $sceneNumberClients.innerHTML = `Atendiendo al cliente <b>${clientNumber}/${numClientes}</b>.`
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
@@ -150,12 +160,12 @@ async function runOrders() {
     await dialogExchange(
       $clientSpeech,
       $waiterSpeech,
-      `Hola, soy ${name}. Me da ${mount} ${currentOrder}/s.`
+      `Hola, soy <b>${name}</b>. Me da <b>${mount} ${currentOrder}/s</b>.`
     )
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
-      `Con gusto, cuesta ${price} $USD. En ${mount} ${currentOrder}, serían $${total}USD.`
+      `Con gusto, cuesta <b>${price}USD</b>. En <b>${mount} ${currentOrder}<b>, serían <b>$${total}USD</b>.`
     )
     if (stockAvailable <= 0) {
       if (!stockOutList.has(currentOrder)) {
@@ -176,25 +186,34 @@ async function runOrders() {
     }
     await processOrder(currentOrder)
     OPTIONS[currentOrder].stock--
-    await dialogExchange($waiterSpeech, $clientSpeech, `Ok. De acuerdo.`)
+    await dialogExchange($clientSpeech, $waiterSpeech, `Ok. De acuerdo.`)
+    $clientSpeech.classList.add('hidden')
+    $scene.style.opacity = '0'
+    await wait(0.7)
+    await updateScene(3, `Preparando <b>${mount} ${currentOrder}/s</b>.`)
+    await wait(0.7)
+    await updateScene(2, '')
     await dialogExchange(
       $waiterSpeech,
       $clientSpeech,
-      `Orden# ${clientNumber}. Aquí tiene su ${currentOrder}. ¡Buen provecho!`
+      `<b>Orden# ${clientNumber}</b>. Aquí tiene su <b>${currentOrder}</b>. ¡Buen provecho!`
     )
+    $clientSpeech.classList.remove('hidden')
     await dialogExchange(
       $clientSpeech,
       $waiterSpeech,
       `Muchas gracias. La cuenta,  por favor.`
     )
-    await dialogExchange(
-      $waiterSpeech,
-      $clientSpeech,
-      `Por su puesto, La cuenta sería $${total}USD total. Tenga su factura.`
-    )
+    const now = new Date()
+    const pad = (n) => (n < 10 ? '0' + n : n)
+    const datetime = `${pad(now.getDate())}/${pad(
+      now.getMonth() + 1
+    )}/${now.getFullYear()}, ${pad(now.getHours())}:${pad(now.getMinutes())}`
+
     orderObject = {
       number: clientNumber,
-      dni: usersJSON[i].id.value,
+      datetime,
+      dni: usersJSON[i].id.value || '999 999 999 9',
       name: `${usersJSON[i].name.first} ${usersJSON[i].name.last}`,
       address: `${usersJSON[i].location.city}, ${usersJSON[i].location.street.name}`,
       order: currentOrder,
@@ -202,10 +221,16 @@ async function runOrders() {
       price,
       total: mount * price,
     }
+    await dialogExchange(
+      $waiterSpeech,
+      $clientSpeech,
+      `Por su puesto <b>${orderObject.name}</b>, La cuenta sería <b>$${total}USD</b> total. Tenga su factura.`
+    )
+
     summary.push(orderObject)
     generateBill()
     $invoiceClientSection.classList.remove('opacity-off')
-    await wait(5)
+    await wait(1.5)
     await dialogExchange($clientSpeech, $waiterSpeech, `Tenga, gracias.`)
     $invoiceClientSection.classList.add('opacity-off')
     await dialogExchange(
@@ -217,18 +242,24 @@ async function runOrders() {
     $scene.style.opacity = '0'
     await wait(2)
   }
-  console.log(
-    'Se terminaron los pedidos o no hay más productos disponibles para servir.'
-  )
+  $audio.pause()
+  $mainBg.style.filter = 'grayscale(100%)'
+  $waiterSpeech.classList.add('hidden')
+  $ambientMusicScene.classList.add('opacity-off')
+  $sceneImg.setAttribute('src', `assets/scenes/1.gif`)
+  $sceneDescription.innerHTML = 'Gracias por preferirnos, hemos cerrado.'
   $scene.style.opacity = '1'
+  $sceneNumberClients.innerHTML = ''
+  await wait(2)
+  $scene.style.opacity = '0'
   insertClientsOnTable()
 }
 
 function generateBill() {
   const rows = $invoiceClient.querySelectorAll('tbody tr'),
     $numberBill = $invoiceClientSection.querySelector('h2')
-
   const data = [
+    orderObject.datetime,
     orderObject.dni,
     orderObject.name,
     orderObject.address,
@@ -238,7 +269,7 @@ function generateBill() {
     `$${orderObject.total}`,
   ]
 
-  $numberBill.innerText = `Factura No.${orderObject.number}`
+  $numberBill.innerText = `Factura No. ${orderObject.number}.`
   rows.forEach((row, i) => {
     row.querySelector('td').innerText = data[i]
   })
@@ -249,7 +280,7 @@ async function getUsers() {
     const result = await http({ url: `${API}=${numClientes}` })
     usersJSON = result.data.results
   } catch (error) {
-    console.log('error al obtener los datos')
+    alert('No se puede acceder a la API, por favor enciende tu internet.')
   }
 }
 
@@ -258,7 +289,8 @@ function insertClientsOnTable() {
     const $tr = d.createElement('tr')
 
     $tr.innerHTML = `
-      <td>${client.number}</td>
+    <td>${client.number}</td>
+    <td>${client.datetime}</td>
       <td>${client.dni}</td>
       <td>${client.name}</td>
       <td>${client.address}</td>
@@ -269,6 +301,7 @@ function insertClientsOnTable() {
     `
     $table.querySelector('tbody').appendChild($tr)
   })
+  $summarySection.classList.remove('opacity-off')
 }
 
 d.addEventListener('DOMContentLoaded', async () => {

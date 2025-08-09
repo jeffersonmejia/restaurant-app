@@ -13,6 +13,7 @@
   </head>
   <body>
     <main>
+      <img src="assets/background/start.jpg" alt="" class="main-background" />
       <section class="scene-simulation-section opacity-off" id="scene">
         <img src="" alt="Escenario de simulación" id="scene-img" />
         <!-- <img src="" alt="" id="waiter-character" />
@@ -49,10 +50,14 @@
           id="ambient-music-audio"
         ></audio>
       </figure>
-      <section class="invoice-section opacity-off">
+      <section class="invoice-section opacity-off invoice-section-anim">
         <h2>Factura No. 1</h2>
         <table class="invoice-table">
           <tbody>
+            <tr>
+              <th>Fecha y hora</th>
+              <td>dd/mm/aa, 00:00</td>
+            </tr>
             <tr>
               <th>Cédula</th>
               <td>1723456789</td>
@@ -84,14 +89,14 @@
           </tbody>
         </table>
       </section>
-      <section class="summary-section hidden">
+      <section class="summary-section opacity-off">
         <article>
           <h2>Reporte diario</h2>
-          <h3 id="current-status-order">Estado: <span></span></h3>
           <table id="summary-table">
             <thead>
               <tr>
                 <th>No</th>
+                <th>Fecha y hora</th>
                 <th>Cédula</th>
                 <th>Cliente</th>
                 <th>Dirección</th>
@@ -103,6 +108,7 @@
             </thead>
             <tbody></tbody>
           </table>
+          <a href="./index.html">Repetir simulación</a>
         </article>
       </section>
     </main>

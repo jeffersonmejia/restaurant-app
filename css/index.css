@@ -87,12 +87,31 @@ img {
   flex-direction: column;
   gap: 0;
   transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+  margin: auto;
+  margin-top: 5rem;
+  position: relative;
+  border-radius: 50%;
+  background-color: rgba(255, 155, 0, 1);
+  width: fit-content;
+  border: 12px solid rgb(216, 136, 16);
+  padding: 3rem 6rem;
+}
+
+.scene-simulation-section img {
+  z-index: 1;
+  width: 22rem;
+  mix-blend-mode: multiply;
+}
+.client-speech,
+.waiter-speech {
+  z-index: 2;
 }
 
 .scene-simulation-section h4 {
-  color: var(--secondary-800);
+  color: rgb(54, 44, 25);
   text-align: center;
   font-size: 1.3rem;
+  font-weight: 400;
 }
 .scene-simulation-section {
   transition: opacity 0.3s ease-in-out;
@@ -100,19 +119,30 @@ img {
 
 .scene-simulation-section small {
   margin-top: 1.5rem;
-  color: var(--secondary-500);
+  color: rgb(54, 44, 25);
 }
 
 .ambient-music {
   position: absolute;
   left: 4vh;
-  bottom: 40vh;
+  top: 23vh;
   width: 12rem;
 }
 
 .ambient-music-cover-on {
   animation: vinylPulse 1s ease-in-out infinite;
   transform-origin: center;
+}
+
+.main-background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
 }
 
 @keyframes vinylPulse {
@@ -152,19 +182,19 @@ img {
   font-style: italic;
 }
 
-.client-speech {
-  width: 14rem;
-  right: 60vh;
-  top: 10vh;
-  border: 1px solid rgb(42, 145, 136);
-  color: rgb(42, 145, 136);
-}
 .waiter-speech {
   width: 14rem;
-  left: 48vh;
-  top: 7.5vh;
-  border: 1px solid rgb(70, 42, 145);
-  color: rgb(70, 42, 145);
+  right: 63vh;
+  top: 8vh;
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+.client-speech {
+  width: 14rem;
+  left: 55vh;
+  background-color: rgb(18, 63, 65);
+  top: 9.5vh;
+  color: white;
 }
 
 .opacity-off {
@@ -230,20 +260,44 @@ audio {
   filter: hue-rotate(215deg);
 }
 
-.invoice-section {
+.summary-section {
   position: absolute;
-  width: 22vw;
-  right: 4vh;
+  right: 2vh;
+  left: 2vh;
   top: 10vh;
   box-shadow: 2px 2px 6px rgba(30, 71, 83, 0.4);
-  transform: translateZ(0);
   perspective: 800px;
   padding: 0 2.5rem;
   padding-top: 1rem;
   padding-bottom: 2.5rem;
+  background-color: rgb(85, 8, 8);
+  width: 80vw;
+  border-radius: 4px;
+  margin: auto;
+}
+
+.summary-section h2 {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.65rem;
+}
+
+.invoice-section {
+  position: absolute;
+  width: 22vw;
+  background-color: rgb(85, 8, 8);
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+  right: 4vh;
+  top: 10vh;
+  box-shadow: 2px 2px 6px rgba(30, 71, 83, 0.4);
+  perspective: 800px;
+  padding: 0 2.5rem;
+  padding-top: 1rem;
+  z-index: 10;
+  padding-bottom: 2.5rem;
   border-radius: 24px;
-  background-color: rgb(233, 250, 255);
-  transition: opacity 0.3s ease-in;
+  background-color: rgb(85, 8, 8);
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
 }
 
 .invoice-section table {
@@ -251,16 +305,35 @@ audio {
 }
 
 .invoice-section h2 {
-  color: rgb(30, 71, 83);
+  color: white;
   margin-bottom: 1.5rem;
 }
 
+.summary-section td,
+.summary-section th,
 .invoice-section td,
 .invoice-section th {
   text-align: left;
   padding-left: 0.7rem;
-  border: 1px solid rgb(147, 189, 202);
-  color: rgb(30, 71, 83);
+  border: 1px solid rgb(175, 120, 120);
+  color: white;
+}
+
+.summary-section a {
+  margin-left: auto;
+  margin-top: 1rem;
+  background-color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  display: flex;
+  width: fit-content;
+  color: rgb(78, 17, 17);
+  padding: 1rem;
+}
+
+.summary-section td,
+.summary-section th {
+  color: rgb(255, 136, 136);
 }
 
 .hidden {
