@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Summer Restaurant</title>
+    <link rel="stylesheet" href="css/index.css" />
+    <link
+      rel="shortcut icon"
+      href="./assets/favicon/favicon.png"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <main>
+      <section class="scene-simulation-section opacity-off" id="scene">
+        <img src="" alt="Escenario de simulación" id="scene-img" />
+        <!-- <img src="" alt="" id="waiter-character" />
+        <img src="" alt="" id="client-character" /> -->
+        <h4 id="scene-description"></h4>
+        <small id="scene-number-clients"></small>
+        <h5 class="waiter-speech opacity-off"></h5>
+        <h5 class="client-speech opacity-off"></h5>
+      </section>
+      <figure class="ambient-music">
+        <img src="assets/ambient/music.gif" alt="" />
+        <div class="ambient-music-controls">
+          <div class="ambient-music-controls-prev">
+            <img src="assets/buttons/play.png" alt="" />
+            <img src="assets/buttons/play.png" alt="" />
+          </div>
+          <img
+            src="assets/buttons/play.png"
+            class="ambient-music-controls-play"
+            alt=""
+          />
+          <div class="ambient-music-controls-next">
+            <img src="assets/buttons/play.png" alt="" />
+            <img src="assets/buttons/play.png" alt="" />
+          </div>
+        </div>
+        <audio
+          src="assets/music/1.mp3"
+          controls
+          id="ambient-music-audio"
+        ></audio>
+      </figure>
+      <section class="summary-section hidden">
+        <article>
+          <h2>Reporte diario</h2>
+          <h3 id="current-status-order">Estado: <span></span></h3>
+          <table id="summary-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Cédula</th>
+                <th>Cliente</th>
+                <th>Dirección</th>
+                <th>Pedido</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+    <script src="js/index.js" type="module"></script>
+  </body>
+</html>
