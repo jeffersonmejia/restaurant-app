@@ -25,12 +25,12 @@ const d = document,
 
 //CTES
 const OPTIONS = {
-    ['sandwich']: { stock: 1, price: 1 },
-    ['hamburguesa']: { stock: 0, price: 2 },
-    ['tonga']: { stock: 1, price: 3 },
-    ['encebollado']: { stock: 5, price: 3 },
-    ['torta de verde']: { stock: 5, price: 2 },
-    ['ceviche de camaron']: { stock: 5, price: 3.5 },
+    ['sandwich']: { stock: 5, price: 1 },
+    ['hamburguesa']: { stock: 6, price: 2 },
+    ['tonga']: { stock: 2, price: 3 },
+    ['encebollado']: { stock: 8, price: 3 },
+    ['torta de verde']: { stock: 1, price: 2 },
+    ['ceviche de camaron']: { stock: 4, price: 3.5 },
   },
   stockOutList = new Set(),
   OPTIONS_KEYS = Object.keys(OPTIONS),
