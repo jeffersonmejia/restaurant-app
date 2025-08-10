@@ -104,7 +104,7 @@ function wait(seconds) {
 
 async function startSimulation() {
   await updateScene(1, 'Bienvenido, hemos abierto')
-  numClientes = randomNumber(0) + 0
+  numClientes = randomNumber(0) + 19
   await getUsers()
   await runOrders()
 }
