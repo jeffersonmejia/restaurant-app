@@ -104,7 +104,7 @@ function wait(seconds) {
 
 async function startSimulation() {
   await updateScene(1, 'Bienvenido, hemos abierto')
-  numClientes = randomNumber(0) + 5
+  numClientes = randomNumber(1) + 20
   await getUsers()
   await runOrders()
 }
@@ -113,7 +113,7 @@ async function updateScene(sceneNumber, message) {
   $sceneImg.setAttribute('src', `assets/scenes/${sceneNumber}.gif`)
   $sceneDescription.innerHTML = message
   $scene.style.opacity = '1'
-  await wait(2)
+  await wait(1.5)
   if (sceneNumber === 3) {
     await wait(3.5)
     $scene.style.opacity = '0'
@@ -141,6 +141,7 @@ async function dialogExchange(speakerEl, listenerEl, text, seconds = 3.5) {
   listenerEl.style.opacity = '0'
   await wait(seconds)
 }
+
 async function runOrders() {
   $mainBg.setAttribute('src', 'assets/background/background.jpg')
   $mainBg.classList.remove('opacity-off')
