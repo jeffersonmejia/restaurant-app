@@ -20,7 +20,8 @@ const d = document,
   $btnPause = d.querySelector('.ambient-music-controls-play'),
   $summarySection = d.querySelector('.summary-section'),
   $sectionMenu = d.querySelector('.section-menu'),
-  $totalSells = d.getElementById('total-sells')
+  $totalSells = d.getElementById('total-sells'),
+  $musicAmbientImg = d.querySelector('.ambient-music img')
 
 //CTES
 const OPTIONS = {
@@ -67,22 +68,31 @@ function togglePlayPause() {
     $audio.volume = 1
     $ambientMusicCover.classList.add('ambient-music-cover-on')
     $btnPause.setAttribute('src', 'assets/buttons/pause.png')
+    $musicAmbientImg.setAttribute('src', 'assets/ambient/music-playing.gif')
   } else {
     $audio.pause()
     $ambientMusicCover.classList.remove('ambient-music-cover-on')
     $btnPause.setAttribute('src', 'assets/buttons/play.png')
+    $musicAmbientImg.setAttribute('src', 'assets/ambient/music-paused.jpg')
   }
 }
 
 function playNext() {
   currentTrack = (currentTrack + 1) % playlist.length
   $audio.src = playlist[currentTrack]
+  if ($audio.paused) {
+    $musicAmbientImg.setAttribute('src', 'assets/ambient/music-playing.gif')
+  }
   $audio.play()
 }
 
 function playPrev() {
   currentTrack = (currentTrack - 1 + playlist.length) % playlist.length
   $audio.src = playlist[currentTrack]
+  if ($audio.paused) {
+    $musicAmbientImg.setAttribute('src', 'assets/ambient/music-playing.gif')
+  }
+  $musicAmbientImg.setAttribute('src', 'assets/ambient/music-playing.gif')
   $audio.play()
 }
 

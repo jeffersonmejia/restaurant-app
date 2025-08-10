@@ -274,6 +274,7 @@ audio {
   background-color: rgb(85, 8, 8);
   width: 80vw;
   border-radius: 4px;
+  z-index: 999;
   margin: auto;
 }
 
