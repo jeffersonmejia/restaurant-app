@@ -104,7 +104,7 @@ function wait(seconds) {
 
 async function startSimulation() {
   await updateScene(1, 'Bienvenido, hemos abierto')
-  numClientes = randomNumber(1) + 20
+  numClientes = randomNumber(0) + 0
   await getUsers()
   await runOrders()
 }
@@ -237,6 +237,7 @@ async function runOrders() {
 
     orderObject = {
       number: clientNumber,
+      country: usersJSON[i].location.country || 'N/A',
       datetime,
       dni: usersJSON[i].id.value || '999 999 999 9',
       name: `${usersJSON[i].name.first} ${usersJSON[i].name.last}`,
@@ -357,6 +358,7 @@ function insertClientsOnTable() {
 
     $tr.innerHTML = `
     <td>${client.number}</td>
+    <td>${client.country}</td>
     <td>${client.datetime}</td>
       <td>${client.dni}</td>
       <td>${client.name}</td>
