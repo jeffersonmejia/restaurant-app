@@ -25,11 +25,11 @@ const d = document,
 
 //CTES
 const OPTIONS = {
-    ['sandwich']: { stock: 5, price: 1 },
-    ['hamburguesa']: { stock: 6, price: 2 },
-    ['tonga']: { stock: 2, price: 3 },
-    ['encebollado']: { stock: 8, price: 3 },
-    ['torta de verde']: { stock: 1, price: 2 },
+    ['sandwich']: { stock: 5, price: 1.5 },
+    ['hamburguesa']: { stock: 6, price: 2.25 },
+    ['tonga']: { stock: 2, price: 3.35 },
+    ['encebollado']: { stock: 8, price: 3.5 },
+    ['torta de verde']: { stock: 1, price: 0.75 },
     ['ceviche de camaron']: { stock: 4, price: 3.5 },
   },
   stockOutList = new Set(),
