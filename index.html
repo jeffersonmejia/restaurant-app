@@ -1,128 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Summer Restaurant</title>
-    <link rel="stylesheet" href="css/index.css" />
-    <link
-      rel="shortcut icon"
-      href="./assets/favicon/favicon.png"
-      type="image/x-icon"
-    />
-  </head>
-  <body>
-    <main>
-      <img src="assets/background/start.jpg" alt="" class="main-background" />
-      <section class="scene-simulation-section opacity-off" id="scene">
-        <img src="" alt="Escenario de simulación" id="scene-img" />
-        <!-- <img src="" alt="" id="waiter-character" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Summer Restaurant</title>
+		<link rel="stylesheet" href="css/index.css" />
+		<link rel="shortcut icon" href="./assets/favicon/favicon.png" type="image/x-icon" />
+	</head>
+	<body>
+		<main>
+			<img src="assets/background/start.jpg" alt="" class="main-background" />
+			<section class="scene-simulation-section opacity-off" id="scene">
+				<img src="" alt="Escenario de simulación" id="scene-img" />
+				<!-- <img src="" alt="" id="waiter-character" />
         <img src="" alt="" id="client-character" /> -->
-        <h4 id="scene-description"></h4>
-        <small id="scene-number-clients"></small>
-        <h5 class="waiter-speech opacity-off"></h5>
-        <h5 class="client-speech opacity-off"></h5>
-      </section>
-      <figure class="ambient-music opacity-off">
-        <img
-          src="assets/ambient/music-paused.jpg"
-          alt=""
-          class="ambient-music-cover"
-        />
-        <div class="ambient-music-controls">
-          <div class="ambient-music-controls-prev">
-            <img src="assets/buttons/play.png" alt="" />
-            <img src="assets/buttons/play.png" alt="" />
-          </div>
-          <img
-            src="assets/buttons/play.png"
-            class="ambient-music-controls-play"
-            alt=""
-          />
-          <div class="ambient-music-controls-next">
-            <img src="assets/buttons/play.png" alt="" />
-            <img src="assets/buttons/play.png" alt="" />
-          </div>
-        </div>
-        <audio
-          src="assets/music/1.mp3"
-          controls
-          id="ambient-music-audio"
-        ></audio>
-      </figure>
-      <section class="section-menu opacity-off">
-        <h2>Menú</h2>
-        <table class="menu-table">
-          <tbody></tbody>
-        </table>
-      </section>
-      <section class="invoice-section opacity-off invoice-section-anim">
-        <h2>Factura No. 1</h2>
-        <table class="invoice-table">
-          <tbody>
-            <tr>
-              <th>Fecha y hora</th>
-              <td>dd/mm/aa, 00:00</td>
-            </tr>
-            <tr>
-              <th>Cédula</th>
-              <td>1723456789</td>
-            </tr>
-            <tr>
-              <th>Cliente</th>
-              <td>Jefferson Mejía</td>
-            </tr>
-            <tr>
-              <th>Dirección</th>
-              <td>Av. Amazonas 123</td>
-            </tr>
-            <tr>
-              <th>Pedido</th>
-              <td>Camisa</td>
-            </tr>
-            <tr>
-              <th>Precio</th>
-              <td>$20</td>
-            </tr>
-            <tr>
-              <th>Cantidad</th>
-              <td>2</td>
-            </tr>
-            <tr>
-              <th>Total</th>
-              <td>$40</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-      <section class="summary-section opacity-off">
-        <article>
-          <h2>Reporte diario</h2>
-          <table id="summary-table">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>País</th>
-                <th>Fecha y hora</th>
-                <th>Cédula</th>
-                <th>Cliente</th>
-                <th>Dirección</th>
-                <th>Pedido</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Total</th>
-                <th>Satisfecho</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <div class="group-btn">
-            <h3 id="total-sells">Total: $00.00</h3>
-            <a href="./index.html">Repetir simulación</a>
-          </div>
-        </article>
-      </section>
-    </main>
-    <script src="js/index.js" type="module"></script>
-  </body>
+				<h4 id="scene-description"></h4>
+				<small id="scene-number-clients"></small>
+				<h5 class="waiter-speech opacity-off"></h5>
+				<h5 class="client-speech opacity-off"></h5>
+			</section>
+			<figure class="ambient-music opacity-off">
+				<img src="assets/ambient/music-paused.jpg" alt="" class="ambient-music-cover" />
+				<div class="ambient-music-controls">
+					<div class="ambient-music-controls-prev">
+						<img src="assets/buttons/play.png" alt="" />
+						<img src="assets/buttons/play.png" alt="" />
+					</div>
+					<img src="assets/buttons/play.png" class="ambient-music-controls-play" alt="" />
+					<div class="ambient-music-controls-next">
+						<img src="assets/buttons/play.png" alt="" />
+						<img src="assets/buttons/play.png" alt="" />
+					</div>
+				</div>
+				<audio src="assets/music/1.mp3" controls id="ambient-music-audio"></audio>
+			</figure>
+			<section class="section-menu opacity-off">
+				<h2>Menú</h2>
+				<table class="menu-table">
+					<tbody></tbody>
+				</table>
+			</section>
+			<section class="invoice-section opacity-off invoice-section-anim">
+				<h2>Factura No. 1</h2>
+				<table class="invoice-table">
+					<tbody>
+						<tr>
+							<th>Fecha y hora</th>
+							<td>dd/mm/aa, 00:00</td>
+						</tr>
+						<tr>
+							<th>Cédula</th>
+							<td>1723456789</td>
+						</tr>
+						<tr>
+							<th>Cliente</th>
+							<td>Jefferson Mejía</td>
+						</tr>
+						<tr>
+							<th>Dirección</th>
+							<td>Av. Amazonas 123</td>
+						</tr>
+						<tr>
+							<th>Pedido</th>
+							<td>Camisa</td>
+						</tr>
+						<tr>
+							<th>Precio</th>
+							<td>$20</td>
+						</tr>
+						<tr>
+							<th>Cantidad</th>
+							<td>2</td>
+						</tr>
+						<tr>
+							<th>Total</th>
+							<td>$40</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+			<section class="summary-section opacity-off">
+				<article>
+					<h2>Reporte diario</h2>
+					<table id="summary-table">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>País</th>
+								<th>Fecha y hora</th>
+								<th>Cédula</th>
+								<th>Cliente</th>
+								<th>Dirección</th>
+								<th>Pedido</th>
+								<th>Precio</th>
+								<th>Cantidad</th>
+								<th>Total</th>
+								<th>Satisfecho</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+					<div class="group-btn">
+						<h3 id="total-sells">Total: $00.00</h3>
+						<a href="./index.html">Repetir simulación</a>
+					</div>
+				</article>
+			</section>
+		</main>
+		<footer>
+			<a
+				href="https://jeffersonmejia.github.io/portfolio-app"
+				target="_blank"
+				id="projects-ancle"
+				>Jefferson Mejía @jeffersonmejiach</a
+			>
+		</footer>
+		<script src="js/index.js" type="module"></script>
+	</body>
 </html>
